@@ -22,7 +22,7 @@
         (add-task (kafka-task/consumer :in kafka-opts))
         (add-task (s3/s3-output :out s3-opts)))))
 
-(defmethod register-job "basic-job"
+(defmethod register-job "event-s3-job"
   [job-name config]
   (let [kafka-opts     {:onyx/batch-size (env :onyx-batch-size)
                         :onyx/batch-timeout 1000
@@ -30,7 +30,7 @@
                         :onyx/max-peers (env :kafka-topic-partitions)
                         :kafka/zookeeper (get-in config [:env-config :zookeeper/address])
                         :kafka/topic (env :kafka-topic)
-                        :kafka/group-id "onyx-event-backup"
+                        :kafka/group-id "cds-event-s3"
                         :kafka/fetch-size 307200
                         :kafka/chan-capacity 1000
                         :kafka/offset-reset :smallest
