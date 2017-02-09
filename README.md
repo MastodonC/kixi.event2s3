@@ -7,7 +7,7 @@ There are a number of environment variables that are required before the job is 
 ### AWS Credentials
 
 ```
-AWS_ACCESS_KEY_ID=Insert your access key]
+AWS_ACCESS_KEY_ID=[Insert your access key]
 AWS_SECRET_KEY=[Your secret key]
 ```
 
