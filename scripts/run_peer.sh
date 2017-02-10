@@ -5,6 +5,7 @@
 
 ONYX_ID=khow
 NPEERS=10
+PROFILE=${SYSTEM_PROFILE:-:mesos}
 
 echo "Using Hecuba user: ${HECUBA_USERNAME}"
 echo "Using Hecuba endpoint: ${HECUBA_ENDPOINT}"
@@ -34,4 +35,4 @@ echo "Starting peer id ${ONYX_ID} with ${NPEERS} peers"
 /usr/bin/java $PEER_JAVA_OPTS \
               "-Xmx${XMX}m" \
               -cp /opt/peer.jar \
-             kixi.event2s3.core start-peers "$NPEERS" -p :mesos -c /opt/config.edn
+             kixi.event2s3.core start-peers "$NPEERS" -p $PROFILE -c /opt/config.edn
