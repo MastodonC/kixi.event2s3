@@ -22,8 +22,8 @@
       "network": "BRIDGE",
       "portMappings": [
           {
-              "containerPort": 8082,
-              "hostPort": 18080,
+              "containerPort": 18081,
+              "hostPort": 18081,
               "protocol":"tcp"
           },
           {

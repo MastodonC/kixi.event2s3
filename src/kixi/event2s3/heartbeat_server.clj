@@ -38,4 +38,4 @@
     (assoc component :listener nil)))
 
 (defn new-web-server [config]
-  (map->WebServer (:web-server config)))
+  (map->WebServer config))
