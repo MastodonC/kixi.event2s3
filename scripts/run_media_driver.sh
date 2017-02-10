@@ -20,5 +20,5 @@ XMX=$(awk '{printf("%d",$1*$2/1024^2)}' <<< " ${MEM} ${JVM_MEDIA_DRIVER_HEAP_RAT
 
 /usr/bin/java $MEDIA_DRIVER_JAVA_OPTS \
               "-Xmx${XMX}m" \
-              -cp /opt/weather.jar \
+              -cp /opt/peer.jar \
               lib_onyx.media_driver
