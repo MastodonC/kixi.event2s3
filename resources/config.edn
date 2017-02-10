@@ -11,6 +11,7 @@
                                :docker "zookeeper:2181"
 			       :production "mesos.master:2181"}
   :zookeeper/server? #profile {:default true
+                               :production false
                                :docker false}
   :zookeeper.server/port 2181
   :onyx.log/config #profile {:default nil
