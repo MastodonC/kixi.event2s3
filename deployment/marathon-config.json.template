@@ -53,7 +53,7 @@
         "protocol": "TCP",
         "gracePeriodSeconds": 600,
         "intervalSeconds": 30,
-        "path": "/health_check",
+        "path": "/healthcheck",
         "portIndex": 0,
         "timeoutSeconds": 10,
         "maxConsecutiveFailures": 3
