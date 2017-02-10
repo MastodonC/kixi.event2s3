@@ -9,7 +9,7 @@
            [yada.resources.webjar-resource :refer [new-webjar-resource]]))
 
 (defn bidi-routes []
-  ["" [["/health_check" (yada/handler "Peers are alive.\n")]]])
+  ["" [["/healthcheck" (yada/handler "Peers are alive.\n")]]])
 
 (defn routes
   "Create the URI route structure for our application."
@@ -20,15 +20,14 @@
     ;; ensures we never pass nil back to Aleph.
     [true (yada/handler nil)]]])
 
-
-(defrecord WebServer [port listener]
+(defrecord WebServer [port listener vhost]
   component/Lifecycle
   (start [component]
     (if listener
       component
       (let [vhosts-model
             (vhosts-model
-             [{:scheme :http :host (format "localhost:%d" port)}
+             [{:scheme :http :host (format "%s:%d" vhost port)}
               (routes {:port port})])
             listener (yada/listener vhosts-model {:port port})]
         (infof "Started web-server on port %s" listener)
@@ -40,4 +39,3 @@
 
 (defn new-web-server [config]
   (map->WebServer (:web-server config)))
-

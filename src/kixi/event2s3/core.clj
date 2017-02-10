@@ -25,9 +25,7 @@
     (or classf relf)))
 
 (def web-server-config
-  {:web-server {:port 8082}
-   :logging {:level :info
-             :ns-blacklist ["org.eclipse.jetty"]}})
+  )
 
 (defn cli-options []
   [["-c" "--config FILE" "Aero/EDN config file"
@@ -101,8 +99,8 @@
           (not= (count arguments) 2) (exit 1 (usage summary))
           errors (exit 1 (error-msg errors)))
     (case action
-      "start-peers" (let [{:keys [env-config peer-config] :as config}
+      "start-peers" (let [{:keys [env-config peer-config web-server] :as config}
                           (read-config (:config options) {:profile (:profile options)})]
                       (.start
-                       (heartbeat/new-web-server web-server-config))
+                       (heartbeat/new-web-server web-server))
                       (start-peer-internal argument peer-config env-config config)))))
