@@ -36,7 +36,7 @@
                read-config "Not a valid Aero or EDN file"]]
 
    ["-p" "--profile PROFILE" "Aero profile"
-    :parse-fn (fn [profile] (clojure.edn/read-string (clojure.string/trim profile)))]
+    :parse-fn (fn [profile] (keyword (clojure.string/trim profile)))]
 
    ["-h" "--help"]])
 
