@@ -82,7 +82,7 @@
     (timbre/info "Started peers. Blocking forever.")
     ;; submit the jobs.
     (onyx.api/submit-job peer-config
-                         (onyx.job/register-job "event2s3-job" config))
+                         (onyx.job/register-job "event-s3-job" config))
     (.join (Thread/currentThread))))
 
 (defn assert-job-exists [job-name]
