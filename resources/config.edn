@@ -19,7 +19,7 @@
  :peer-config
  {:onyx/tenancy-id #profile {:default "1"
                              :docker #env ONYX_ID
-			     :mesos #evn ONYX_ID}
+			     :mesos #env ONYX_ID}
   :zookeeper/address #profile {:default "127.0.0.1:2181"
                                :docker "zookeeper:2181"
 			       :mesos "mesos.master:2181"}
