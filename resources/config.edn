@@ -44,5 +44,5 @@
                                 :port 8082
                                 :request-logging? true}
                        :production {:vhost "kixi.event2s3.marathon.mesos"
-                                    :port 18080
+                                    :port 18081
                                     :request-logging? true}}}
