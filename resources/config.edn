@@ -9,7 +9,7 @@
   :onyx.bookkeeper/port 3196
   :zookeeper/address #profile {:default "127.0.0.1:2181"
                                :docker "zookeeper:2181"
-			       :production "mesos.master:2181"}
+			       :production "master.mesos:2181"}
   :zookeeper/server? #profile {:default true
                                :production false
                                :docker false}
@@ -23,7 +23,7 @@
 			     :production #env ONYX_ID}
   :zookeeper/address #profile {:default "127.0.0.1:2181"
                                :docker "zookeeper:2181"
-			       :production "mesos.master:2181"}
+			       :production "master.mesos:2181"}
   :onyx.peer/job-scheduler :onyx.job-scheduler/balanced
   :onyx.peer/zookeeper-timeout 60000
   :onyx.messaging/allow-short-circuit? #profile {:default false
