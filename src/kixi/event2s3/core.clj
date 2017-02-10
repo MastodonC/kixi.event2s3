@@ -98,12 +98,12 @@
     (cond (:help options) (exit 0 (usage summary))
           (not= (count arguments) 2) (exit 1 (usage summary))
           errors (exit 1 (error-msg errors)))
+    (timbre/info "Arguments:" args)
+    (timbre/info "Options:" pargs)
     (case action
       "start-peers" (let [{:keys [env-config peer-config web-server] :as config}
                           (read-config (:config options) {:profile (:profile options)})]
-                      (timbre/info peer-config)
-                      (timbre/info env-config)
-                      (timbre/info web-server)
+                      (timbre/info config)
                       (.start
                        (heartbeat/new-web-server web-server))
                       (start-peer-internal argument peer-config env-config config)))))
