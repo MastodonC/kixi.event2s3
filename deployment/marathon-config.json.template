@@ -15,7 +15,7 @@
          {"key": "env", "value":"ONYX_ID=1"},
          {"key": "env", "value":"NPEERS=8"},
          {"key": "env", "value":"KAFKA_TOPIC=event"},
-         {"key": "env", "value":"S3_BUCKET_NAME=kixi-event-backup"},
+         {"key": "env", "value":"S3_BUCKET_NAME=@@S3_BUCKET@@"},
          {"key": "env", "value":"ONYX_BATCH_SIZE=@@ONYX_BATCH_SIZE@@"},
          {"key": "env", "value":"KAFKA_TOPIC_PARTITIONS=3"}
       ],
