@@ -38,10 +38,10 @@
                              :docker {:level :info}
 			     :production {:level :info}}}
  :web-server #profile {:default {:vhost #or [#env VHOST "localhost"]
-                                 :port 8080
+                                 :port 8082
                                  :request-logging? true}
                        :docker {:vhost #or [#env VHOST "localhost"]
-                                :port 8080
+                                :port 8082
                                 :request-logging? true}
                        :production {:vhost "kixi.event2s3.marathon.mesos"
                                     :port 18080

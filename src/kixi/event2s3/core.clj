@@ -101,6 +101,9 @@
     (case action
       "start-peers" (let [{:keys [env-config peer-config web-server] :as config}
                           (read-config (:config options) {:profile (:profile options)})]
+                      (timbre/info peer-config)
+                      (timbre/info env-config)
+                      (timbre/info web-server)
                       (.start
                        (heartbeat/new-web-server web-server))
                       (start-peer-internal argument peer-config env-config config)))))
