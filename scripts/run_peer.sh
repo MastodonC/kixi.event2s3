@@ -3,12 +3,9 @@
 # Docker's virtual memory. Use if it's a problem
 # see https://siddhesh.in/posts/malloc-per-thread-arenas-in-glibc.html
 
-ONYX_ID=khow
+ONYX_ID=kixi.event2s3
 NPEERS=10
-PROFILE=${SYSTEM_PROFILE:-:mesos}
-
-echo "Using Hecuba user: ${HECUBA_USERNAME}"
-echo "Using Hecuba endpoint: ${HECUBA_ENDPOINT}"
+PROFILE=${SYSTEM_PROFILE:-:production}
 
 CGROUPS_MEM=$(cat /sys/fs/cgroup/memory/memory.limit_in_bytes)
 MEMINFO_MEM=$(($(awk '/MemTotal/ {print $2}' /proc/meminfo)*1024))
@@ -29,8 +26,8 @@ XMX=$(awk '{printf("%d",$1*$2/1024^2)}' <<< " ${MEM} ${JVM_PEER_HEAP_RATIO} ")
 
 : ${PEER_JAVA_OPTS:='-XX:+UseG1GC -server'}
 
+echo "Using profile: ${PROFILE}"
 echo "Starting peer id ${ONYX_ID} with ${NPEERS} peers"
-
 
 /usr/bin/java $PEER_JAVA_OPTS \
               "-Xmx${XMX}m" \
