@@ -1,7 +1,7 @@
 {:env-config
  {:onyx/tenancy-id #profile {:default "1"
                              :docker #env ONYX_ID
-			     :mesos #evn ONYX_ID}
+			     :mesos #env ONYX_ID}
   :onyx.bookkeeper/server? false
   :onyx.bookkeeper/local-quorum? true
   :onyx.bookkeeper/delete-server-data? true
@@ -15,7 +15,7 @@
   :zookeeper.server/port 2181
   :onyx.log/config #profile {:default nil
                              :docker {:level :info}
-			     :mesos {:level :info}}
+			     :mesos {:level :info}}}
  :peer-config
  {:onyx/tenancy-id #profile {:default "1"
                              :docker #env ONYX_ID
@@ -35,4 +35,4 @@
 				                   :mesos false}
   :onyx.log/config #profile {:default nil
                              :docker {:level :info}
-			     :mesos {:level :info}}}
+			     :mesos {:level :info}}}}
