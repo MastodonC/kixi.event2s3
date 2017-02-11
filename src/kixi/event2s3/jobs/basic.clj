@@ -6,7 +6,8 @@
             [onyx.plugin.s3-output]
             [onyx.plugin.s3-utils :as s3-utils]
             [onyx.tasks.kafka :as kafka-task]
-            [onyx.tasks.s3 :as s3]))
+            [onyx.tasks.s3 :as s3]
+            [kixi.event2s3.shared]))
 
 (defn basic-job
   [kafka-opts s3-opts]
@@ -24,19 +25,19 @@
 
 (defmethod register-job "event-s3-job"
   [job-name config]
-  (let [kafka-opts     {:onyx/batch-size (env :onyx-batch-size)
+  (let [kafka-opts     {:onyx/batch-size (Integer/parseInt (env :onyx-batch-size))
                         :onyx/batch-timeout 1000
-                        :onyx/min-peers (env :kafka-topic-partitions)
-                        :onyx/max-peers (env :kafka-topic-partitions)
+                        :onyx/type :input
+                        :onyx/medium :kafka
+                        :onyx/min-peers (Integer/parseInt (env :kafka-topic-partitions))
+                        :onyx/max-peers (Integer/parseInt (env :kafka-topic-partitions))
                         :kafka/zookeeper (get-in config [:env-config :zookeeper/address])
                         :kafka/topic (env :kafka-topic)
                         :kafka/group-id "cds-event-s3"
-                        :kafka/fetch-size 307200
-                        :kafka/chan-capacity 1000
                         :kafka/offset-reset :smallest
-                        :kafka/force-reset? true
-                        :kafka/empty-read-back-off 500
                         :kafka/commit-interval 500
+                        :kafka/wrap-with-metadata? false
+                        :kafka/force-reset? false
                         :kafka/deserializer-fn :kixi.event2s3.shared/deserialize-message
                         :onyx/doc "Reads messages from a Kafka topic"}
         s3-opts    {:s3/bucket (env :s3-bucket-name)
@@ -46,7 +47,7 @@
                     :onyx/medium :s3
                     :onyx/min-peers 1
                     :onyx/max-peers 1
-                    :onyx/batch-size (env :onyx-batch-size)
+                    :onyx/batch-size (Integer/parseInt (env :onyx-batch-size))
                     :onyx/batch-timeout 1000
                     :onyx/doc "Writes segments to s3 files, one file per batch"}]
     (basic-job kafka-opts s3-opts)))
