@@ -9,7 +9,7 @@
   :onyx.bookkeeper/port 3196
   :zookeeper/address #profile {:default "127.0.0.1:2181"
                                :docker "zookeeper:2181"
-			       :production "master.mesos:2181"}
+			       :production "master.mesos:2181/dcos-service-kafka"}
   :zookeeper/server? #profile {:default false
                                :production false
                                :docker false}
@@ -23,7 +23,7 @@
 			     :production #env ONYX_ID}
   :zookeeper/address #profile {:default "127.0.0.1:2181"
                                :docker "zookeeper:2181"
-			       :production "master.mesos:2181"}
+			       :production "master.mesos:2181/dcos-service-kafka"}
   :onyx.peer/job-scheduler :onyx.job-scheduler/balanced
   :onyx.peer/zookeeper-timeout 60000
   :onyx.messaging/allow-short-circuit? #profile {:default false
