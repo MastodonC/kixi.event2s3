@@ -17,7 +17,7 @@
          {"key": "env", "value":"KAFKA_TOPIC=event"},
          {"key": "env", "value":"S3_BUCKET_NAME=@@S3_BUCKET@@"},
          {"key": "env", "value":"ONYX_BATCH_SIZE=@@ONYX_BATCH_SIZE@@"},
-         {"key": "env", "value":"KAFKA_TOPIC_PARTITIONS=3"},
+         {"key": "env", "value":"KAFKA_TOPIC_PARTITIONS=1"},
          {"key": "env", "value":"AWS_REGION=@@AWS_REGION@@"}
       ],
       "network": "BRIDGE",
