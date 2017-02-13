@@ -98,6 +98,8 @@
     (cond (:help options) (exit 0 (usage summary))
           (not= (count arguments) 2) (exit 1 (usage summary))
           errors (exit 1 (error-msg errors)))
+    (timbre/merge-config!
+     {:output-fn (partial timbre/default-output-fn {:stacktrace-fonts {}})})
     (timbre/info "Arguments:" args)
     (timbre/info "Options:" pargs)
     (case action
