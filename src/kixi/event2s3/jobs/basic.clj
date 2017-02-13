@@ -7,10 +7,12 @@
             [onyx.plugin.s3-utils :as s3-utils]
             [onyx.tasks.kafka :as kafka-task]
             [onyx.tasks.s3 :as s3]
-            [kixi.event2s3.shared]))
+            [kixi.event2s3.shared]
+            [taoensso.timbre :as timbre]))
 
 (defn basic-job
   [kafka-opts s3-opts]
+  (timbre/infof "Setting region: %s " (env :aws-region))
   (let [aws-client (s3-utils/set-region (s3-utils/new-client) (env :aws-region))
         base-job {:workflow [[:in :out]]
                   :catalog []
