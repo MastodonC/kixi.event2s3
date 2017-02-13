@@ -3,22 +3,27 @@
             [clojure.java.io :as io]
             [clj-time.core :as t]
             [clj-time.format :as f]
-            [cheshire.core :as json])
+            [cognitect.transit :as tr])
   (:import [java.io PrintWriter]
            [java.util.zip GZIPOutputStream]))
 
 (def date-format (f/formatters :basic-date))
 (def time-format (f/formatters :time))
 
+(def transit-encoding-level :json-verbose) ;; DO NOT CHANGE
+(defn transit-decode-bytes [in]
+  (let [reader (tr/reader in transit-encoding-level)]
+    (tr/read reader)))
+
 (defn s3-naming-function [event]
   (str "backup/" (f/unparse date-format (t/now)) "/" (f/unparse time-format (t/now)) "-" (:onyx.core/lifecycle-id event) ".gz"))
 
 (defn deserialize-message [bytes]
-  (let [as-string (String. bytes "UTF-8")]
-    (try
-      (json/parse-string as-string true)
-      (catch Exception e
-        {:parse_error e :original as-string}))))
+  (let [result (try
+                 (transit-decode-bytes (io/input-stream bytes))
+                 (catch Exception e
+                   {:parse_error e :original (String. bytes "UTF-8")}))]
+    result))
 
 (def gzip-serializer-fn
   (fn [vs]
