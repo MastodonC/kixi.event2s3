@@ -1,7 +1,7 @@
 {:env-config
  {:onyx/tenancy-id #profile {:default "1"
-                             :docker #env ONYX_ID
-			     :production #env ONYX_ID}
+                             :docker #or [#env ONYX_ID "kixi.event2s3"]
+			     :production #or [#env ONYX_ID "kixi.event2s3"]}
   :onyx.bookkeeper/server? false
   :onyx.bookkeeper/local-quorum? true
   :onyx.bookkeeper/delete-server-data? true
