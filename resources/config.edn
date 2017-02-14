@@ -1,7 +1,8 @@
-{:env-config
+{:app-name "kixi.event2s3"
+ :env-config
  {:onyx/tenancy-id #profile {:default "1"
-                             :docker #or [#env ONYX_ID "kixi.event2s3"]
-			     :production #or [#env ONYX_ID "kixi.event2s3"]}
+                             :docker #or [#env ONYX_ID ^:ref [:app-name]]
+			     :production #or [#env ONYX_ID ^:ref [:app-name]]}
   :onyx.bookkeeper/server? false
   :onyx.bookkeeper/local-quorum? true
   :onyx.bookkeeper/delete-server-data? true
@@ -19,8 +20,8 @@
 			     :production {:level :info}}}
  :peer-config
  {:onyx/tenancy-id #profile {:default "1"
-                             :docker #env ONYX_ID
-			     :production #env ONYX_ID}
+                             :docker #or [#env ONYX_ID ^:ref [:app-name]]
+			     :production #or [#env ONYX_ID ^:ref [:app-name]]}
   :zookeeper/address #profile {:default "127.0.0.1:2181"
                                :docker "zookeeper:2181"
 			       :production "master.mesos:2181/dcos-service-kafka"}
