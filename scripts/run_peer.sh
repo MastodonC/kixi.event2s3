@@ -4,7 +4,6 @@
 # see https://siddhesh.in/posts/malloc-per-thread-arenas-in-glibc.html
 
 ONYX_ID=kixi.event2s3
-NPEERS=10
 PROFILE=${SYSTEM_PROFILE:-:production}
 
 CGROUPS_MEM=$(cat /sys/fs/cgroup/memory/memory.limit_in_bytes)
