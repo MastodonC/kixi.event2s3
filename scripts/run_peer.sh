@@ -30,14 +30,14 @@ echo "Starting peer id ${ONYX_ID} with ${NPEERS} peers"
 
 /usr/bin/java $PEER_JAVA_OPTS \
               "-Xmx${XMX}m" \
-              -XX:+HeapDumpOnOutOfMemoryError
-              -XX:HeapDumpPath=$SANDBOX
-              -XX:ErrorFile=$SANDBOX/hs_err_pid_%p.log
-              -Xloggc:$SANDBOX/gc_%p.log
-              -XX:+PrintGCCause
-              -XX:+UseGCLogFileRotation
-              -XX:NumberOfGCLogFiles=3
-              -XX:GCLogFileSize=2M
-              -XX:+PrintGCDateStamps
+              -XX:+HeapDumpOnOutOfMemoryError \
+              -XX:HeapDumpPath=$SANDBOX \
+              -XX:ErrorFile=$SANDBOX/hs_err_pid_%p.log \
+              -Xloggc:$SANDBOX/gc_%p.log \
+              -XX:+PrintGCCause \
+              -XX:+UseGCLogFileRotation \
+              -XX:NumberOfGCLogFiles=3 \
+              -XX:GCLogFileSize=2M \
+              -XX:+PrintGCDateStamps \
               -cp /opt/peer.jar \
              kixi.event2s3.core start-peers "$NPEERS" -p $PROFILE -c /opt/config.edn
