@@ -8,7 +8,7 @@
                  [org.clojure/tools.cli "0.3.5"]
                  [org.onyxplatform/onyx "0.9.10"]
                  [org.onyxplatform/lib-onyx "0.9.10.0"]
-                 [org.onyxplatform/onyx-kafka "0.9.10.0"]
+                 [org.onyxplatform/onyx-kafka "0.10.0.0-technical-preview-4"]
                  [org.onyxplatform/onyx-amazon-s3 "0.9.15.0"]
                  [com.stuartsierra/component "0.3.1"]
                  [clj-time "0.10.0"]
