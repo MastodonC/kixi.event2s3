@@ -38,7 +38,7 @@
                         :kafka/zookeeper (get-in config [:env-config :zookeeper/address])
                         :kafka/topic (get-in config [:job-config :kafka-topic])
                         :kafka/group-id "cds-event-s3"
-                        :kafka/offset-reset :smallest
+                        :kafka/offset-reset :earliest
                         :kafka/commit-interval 500
                         :kafka/wrap-with-metadata? false
                         :kafka/force-reset? false
