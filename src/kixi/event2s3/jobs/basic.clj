@@ -7,7 +7,9 @@
             [onyx.tasks.kafka :as kafka-task]
             [onyx.tasks.s3 :as s3]
             [kixi.event2s3.shared]
-            [taoensso.timbre :as timbre]))
+            [taoensso.timbre :as timbre]
+            [franzy.admin.zookeeper.client :as client]
+            [franzy.admin.partitions :as fp]))
 
 (defn basic-job
   [kafka-opts s3-opts region]
@@ -24,19 +26,35 @@
         (add-task (kafka-task/consumer :in kafka-opts))
         (add-task (s3/s3-output :out s3-opts)))))
 
+(defn get-partition-count-for-topic
+  [zk-addr topic]
+  (let [zk-utils (client/make-zk-utils {:servers zk-addr} false)]
+    (try
+      (-> zk-utils
+          (fp/partitions-for [topic])
+          (get (keyword topic))
+          (count))
+      (catch Exception e
+        1)
+      (finally
+        (.close zk-utils)))))
+
 (defmethod register-job "event-s3-job"
   [job-name config]
 
-  (let [onyx-batch-size (get-in config [:job-config :onyx-batch-size])
-        kafka-topic-partitions (get-in config [:job-config :kafka-topic-partitions])
+  (let [topic (get-in config [:job-config :kafka-topic])
+        zk-addr (get-in config [:env-config :zookeeper/address])
+        kafka-topic-partitions (get-partition-count-for-topic zk-addr topic)
+        _ (timbre/info "Detected" kafka-topic-partitions "Kafka partitions for topic" topic)
+        onyx-batch-size (get-in config [:job-config :onyx-batch-size])
         kafka-opts     {:onyx/batch-size onyx-batch-size
                         :onyx/batch-timeout 1000
                         :onyx/type :input
                         :onyx/medium :kafka
                         :onyx/min-peers kafka-topic-partitions
                         :onyx/max-peers kafka-topic-partitions
-                        :kafka/zookeeper (get-in config [:env-config :zookeeper/address])
-                        :kafka/topic (get-in config [:job-config :kafka-topic])
+                        :kafka/zookeeper zk-addr
+                        :kafka/topic topic
                         :kafka/group-id "cds-event-s3"
                         :kafka/offset-reset :earliest
                         :kafka/commit-interval 500
