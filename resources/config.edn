@@ -50,7 +50,6 @@
                                     :request-logging? true}}
  :job-config {:onyx-batch-size #long #or [#env ONYX_BATCH_SIZE 10]
               :onyx-batch-timeout #long #or [#env ONYX_BATCH_TIMEOUT 1000]
-              :kafka-topic-partitions #long #or [#env KAFKA_TOPIC_PARTITIONS 1]
               :kafka-topic #or [#env KAFKA_TOPIC "event"]
               :aws-region #or [#env AWS_REGION "eu-central-1"]
               :s3-bucket-name #or [#env S3_BUCKET_NAME "mc-witan-event-backup-staging"]}}

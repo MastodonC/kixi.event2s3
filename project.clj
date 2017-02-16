@@ -11,6 +11,7 @@
                  [org.onyxplatform/onyx-kafka "0.9.15.0"]
                  [org.onyxplatform/onyx-amazon-s3 "0.9.15.0"]
                  [com.stuartsierra/component "0.3.1"]
+                 [ymilky/franzy-admin "0.0.1" :exclusions [org.slf4j/slf4j-log4j12]]
                  [clj-time "0.10.0"]
                  [com.fasterxml.jackson.core/jackson-core "2.6.6"]
                  [com.cognitect/transit-clj "0.8.297"]
