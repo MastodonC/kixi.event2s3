@@ -6,10 +6,22 @@
             [onyx.plugin.s3-utils :as s3-utils]
             [onyx.tasks.kafka :as kafka-task]
             [onyx.tasks.s3 :as s3]
-            [kixi.event2s3.shared]
+            [kixi.event2s3.shared :as shared]
             [taoensso.timbre :as timbre]
             [franzy.admin.zookeeper.client :as client]
             [franzy.admin.partitions :as fp]))
+
+(def logger (agent nil))
+
+(defn log-after-read-batch [event lifecycle]
+  (send logger (fn [_]
+                 (when-let [batch (:onyx.core/batch event)]
+                   (run! (fn [{:keys [message]}]
+                           (timbre/info (shared/deserialize-message message))) batch))))
+  {})
+
+(def logger-lifecycle
+  {:lifecycle/after-read-batch log-after-read-batch})
 
 (defn basic-job
   [kafka-opts s3-opts region]
@@ -17,7 +29,9 @@
   (let [aws-client (s3-utils/set-region (s3-utils/new-client) region)
         base-job {:workflow [[:in :out]]
                   :catalog []
-                  :lifecycles []
+                  :lifecycles [{:lifecycle/task :in
+                                :lifecycle/calls :kixi.event2s3.jobs.basic/logger-lifecycle
+                                :onyx/doc "Log incoming messages"}]
                   :windows []
                   :triggers []
                   :flow-conditions []
@@ -46,9 +60,8 @@
         zk-addr (get-in config [:env-config :zookeeper/address])
         kafka-topic-partitions (get-partition-count-for-topic zk-addr topic)
         _ (timbre/info "Detected" kafka-topic-partitions "Kafka partitions for topic" topic)
-        onyx-batch-size (get-in config [:job-config :onyx-batch-size])
-        kafka-opts     {:onyx/batch-size onyx-batch-size
-                        :onyx/batch-timeout 1000
+        kafka-opts     {:onyx/batch-size (get-in config [:job-config :kafka-task :onyx-batch-size])
+                        :onyx/batch-timeout (get-in config [:job-config :kafka-task :onyx-batch-timeout])
                         :onyx/type :input
                         :onyx/medium :kafka
                         :onyx/min-peers kafka-topic-partitions
@@ -60,7 +73,7 @@
                         :kafka/commit-interval 500
                         :kafka/wrap-with-metadata? false
                         :kafka/force-reset? false
-                        :kafka/deserializer-fn :kixi.event2s3.shared/deserialize-message
+                        :kafka/deserializer-fn :clojure.core/identity
                         :onyx/doc "Reads messages from a Kafka topic"}
         s3-opts    {:s3/bucket (get-in config [:job-config :s3-bucket-name])
                     :s3/serializer-fn :kixi.event2s3.shared/gzip-serializer-fn
@@ -69,7 +82,7 @@
                     :onyx/medium :s3
                     :onyx/min-peers 1
                     :onyx/max-peers 1
-                    :onyx/batch-size onyx-batch-size
-                    :onyx/batch-timeout (get-in config [:job-config :onyx-batch-timeout])
+                    :onyx/batch-size (get-in config [:job-config :s3-task :onyx-batch-size])
+                    :onyx/batch-timeout (get-in config [:job-config :s3-task :onyx-batch-timeout])
                     :onyx/doc "Writes segments to s3 files, one file per batch"}]
     (basic-job kafka-opts s3-opts (get-in config [:job-config :aws-region]))))
