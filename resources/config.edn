@@ -1,4 +1,7 @@
 {:app-name "kixi.event2s3"
+ :log-config #profile {:default {:level :debug}
+                       :docker {:level :info}
+                       :production {:level :info}}
  :env-config
  {:onyx/tenancy-id #profile {:default "1"
                              :docker #or [#env ONYX_ID ^:ref [:app-name]]
@@ -15,9 +18,7 @@
                                :production false
                                :docker false}
   :zookeeper.server/port 2181
-  :onyx.log/config #profile {:default nil
-                             :docker {:level :info}
-			     :production {:level :info}}}
+  :onyx.log/config {}}
  :peer-config
  {:onyx/tenancy-id #profile {:default "1"
                              :docker #or [#env ONYX_ID ^:ref [:app-name]]
@@ -36,9 +37,7 @@
   :onyx.messaging.aeron/embedded-driver? #profile {:default true
                                                    :docker false
 				                   :production false}
-  :onyx.log/config #profile {:default nil
-                             :docker {:level :info}
-			     :production {:level :info}}}
+  :onyx.log/config {}}
  :web-server #profile {:default {:vhost #or [#env VHOST "localhost"]
                                  :port 8082
                                  :request-logging? true}

@@ -18,6 +18,7 @@
                  [org.clojure/data.csv "0.1.3"]
                  [com.taoensso/timbre "4.8.0"]
                  [environ "1.1.0"]
+                 [cheshire "5.6.3"]
                  [org.clojure/tools.cli "0.3.3"]
                  [yada "1.2.0"]
                  [bidi "2.0.9"]

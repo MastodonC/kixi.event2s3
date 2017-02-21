@@ -7,6 +7,7 @@
             [onyx.tasks.kafka :as kafka-task]
             [onyx.tasks.s3 :as s3]
             [kixi.event2s3.shared :as shared]
+            [kixi.event2s3.logstash :as logstash]
             [taoensso.timbre :as timbre]
             [franzy.admin.zookeeper.client :as client]
             [franzy.admin.partitions :as fp]))
@@ -17,7 +18,12 @@
   (send logger (fn [_]
                  (when-let [batch (:onyx.core/batch event)]
                    (run! (fn [{:keys [message]}]
-                           (timbre/info (shared/deserialize-message message))) batch))))
+                           (try
+                             (timbre/with-merged-config
+                               {:event? true}
+                               (timbre/info (shared/deserialize-message message)))
+                             (catch Exception e
+                               (timbre/error e "original:" (String. message "UTF-8"))))) batch))))
   {})
 
 (def logger-lifecycle
@@ -55,7 +61,6 @@
 
 (defmethod register-job "event-s3-job"
   [job-name config]
-
   (let [topic (get-in config [:job-config :kafka-topic])
         zk-addr (get-in config [:env-config :zookeeper/address])
         kafka-topic-partitions (get-partition-count-for-topic zk-addr topic)
