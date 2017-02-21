@@ -1,3 +1,4 @@
+(def slf4j-version "1.7.21")
 (defproject kixi.event2s3 "0.1.0-SNAPSHOT"
   :description ""
   :url ""
@@ -22,7 +23,10 @@
                  [org.clojure/tools.cli "0.3.3"]
                  [yada "1.2.0"]
                  [bidi "2.0.9"]
-                 [aleph "0.4.1"]]
+                 [aleph "0.4.1"]
+                 [org.slf4j/log4j-over-slf4j ~slf4j-version]
+                 [org.slf4j/jul-to-slf4j ~slf4j-version]
+                 [org.slf4j/jcl-over-slf4j ~slf4j-version]]
   :source-paths ["src"]
 
   :profiles {:dev {:jvm-opts ["-XX:-OmitStackTraceInFastThrow"]
