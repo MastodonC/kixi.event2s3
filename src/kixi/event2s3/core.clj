@@ -10,6 +10,7 @@
             [taoensso.timbre :as timbre]
             [com.stuartsierra.component :as component]
             [kixi.event2s3.heartbeat-server :as heartbeat]
+            [kixi.event2s3.logstash :as logstash]
             ;; Load plugin classes on peer start
             [onyx.plugin [core-async]]
             ;; Load our jobs
@@ -98,14 +99,23 @@
     (cond (:help options) (exit 0 (usage summary))
           (not= (count arguments) 2) (exit 1 (usage summary))
           errors (exit 1 (error-msg errors)))
-    (timbre/merge-config!
-     {:output-fn (partial timbre/default-output-fn {:stacktrace-fonts {}})})
-    (timbre/info "Arguments:" args)
-    (timbre/info "Options:" pargs)
-    (case action
-      "start-peers" (let [{:keys [env-config peer-config web-server] :as config}
-                          (read-config (:config options) {:profile (:profile options)})]
-                      (timbre/info config)
-                      (.start
-                       (heartbeat/new-web-server web-server))
-                      (start-peer-internal argument peer-config env-config config)))))
+    (let [config (read-config (:config options) {:profile (:profile options)})
+          log-config (assoc (:log-config config)
+                            :timestamp-opts logstash/logback-timestamp-opts)]
+      (timbre/set-config!
+       (assoc log-config
+              :appenders (if (= (:profile options)
+                                :production)
+                           {:direct-json {:enabled?   true
+                                          :async?     false
+                                          :output-fn identity
+                                          :fn (logstash/json->out "kixi.event2s3")}}
+                           {:println (timbre/println-appender)})))
+      (timbre/info "Arguments:" args)
+      (timbre/info "Options:" pargs)
+      (case action
+        "start-peers" (let [{:keys [env-config peer-config web-server]} config]
+                        (timbre/info config)
+                        (.start
+                         (heartbeat/new-web-server web-server))
+                        (start-peer-internal argument peer-config env-config config))))))

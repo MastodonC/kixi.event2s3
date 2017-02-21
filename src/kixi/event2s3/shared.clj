@@ -19,11 +19,7 @@
   (str "backup/" (f/unparse date-format (t/now)) "/" (f/unparse time-format (t/now)) "-" (:onyx.core/lifecycle-id event) ".gz"))
 
 (defn deserialize-message [bytes]
-  (let [result (try
-                 (transit-decode-bytes (io/input-stream bytes))
-                 (catch Exception e
-                   {:parse_error e :original (String. bytes "UTF-8")}))]
-    result))
+  (transit-decode-bytes (io/input-stream bytes)))
 
 (def gzip-serializer-fn
   (fn [vs]

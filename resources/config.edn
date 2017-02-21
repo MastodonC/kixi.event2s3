@@ -1,4 +1,7 @@
 {:app-name "kixi.event2s3"
+ :log-config #profile {:default {:level :debug}
+                       :docker {:level :info}
+                       :production {:level :info}}
  :env-config
  {:onyx/tenancy-id #profile {:default "1"
                              :docker #or [#env ONYX_ID ^:ref [:app-name]]
@@ -15,9 +18,7 @@
                                :production false
                                :docker false}
   :zookeeper.server/port 2181
-  :onyx.log/config #profile {:default nil
-                             :docker {:level :info}
-			     :production {:level :info}}}
+  :onyx.log/config {}}
  :peer-config
  {:onyx/tenancy-id #profile {:default "1"
                              :docker #or [#env ONYX_ID ^:ref [:app-name]]
@@ -36,9 +37,7 @@
   :onyx.messaging.aeron/embedded-driver? #profile {:default true
                                                    :docker false
 				                   :production false}
-  :onyx.log/config #profile {:default nil
-                             :docker {:level :info}
-			     :production {:level :info}}}
+  :onyx.log/config {}}
  :web-server #profile {:default {:vhost #or [#env VHOST "localhost"]
                                  :port 8082
                                  :request-logging? true}
@@ -48,8 +47,10 @@
                        :production {:vhost "kixi.event2s3.marathon.mesos"
                                     :port 18081
                                     :request-logging? true}}
- :job-config {:onyx-batch-size #long #or [#env ONYX_BATCH_SIZE 10]
-              :onyx-batch-timeout #long #or [#env ONYX_BATCH_TIMEOUT 1000]
+ :job-config {:kafka-task {:onyx-batch-size #long #or [#env ONYX_BATCH_SIZE 10]
+                           :onyx-batch-timeout #long #or [#env ONYX_BATCH_TIMEOUT 1000]}
+              :s3-task {:onyx-batch-size #long #or [#env ONYX_BATCH_SIZE 50]
+                        :onyx-batch-timeout #long #or [#env ONYX_BATCH_TIMEOUT 60000]}
               :kafka-topic #or [#env KAFKA_TOPIC "event"]
               :aws-region #or [#env AWS_REGION "eu-central-1"]
               :s3-bucket-name #or [#env S3_BUCKET_NAME "mc-witan-event-backup-staging"]}}
