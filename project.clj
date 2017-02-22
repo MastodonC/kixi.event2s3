@@ -37,4 +37,12 @@
              :uberjar {:aot [lib-onyx.media-driver
                              kixi.event2s3.core]
                        :uberjar-name "peer.jar"
-                       :global-vars {*assert* false}}})
+                       :global-vars {*assert* false}}}
+  :release-tasks [["vcs" "assert-committed"]
+                  ["change" "version"
+                   "leiningen.release/bump-version" "release"]
+                  ["vcs" "commit"]
+                  ["vcs" "tag"]
+                  ["change" "version" "leiningen.release/bump-version"]
+                  ["vcs" "commit"]
+                  ["vcs" "push"]])
