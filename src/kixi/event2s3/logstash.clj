@@ -44,7 +44,7 @@
              :message msg
              "@timestamp" (force (:timestamp_ data))}]
     (if (get-in data [:config :event?])
-      (assoc out :log-type :event)
+      (assoc out :logtype :event)
       out)))
 
 (defn json->out
