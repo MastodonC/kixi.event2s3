@@ -10,8 +10,7 @@
             [kixi.event2s3.logstash :as logstash]
             [taoensso.timbre :as timbre]
             [franzy.admin.zookeeper.client :as client]
-            [franzy.admin.partitions :as fp]
-            [cheshire.core :refer [generate-string]]))
+            [franzy.admin.partitions :as fp]))
 
 (def logger (agent nil))
 
