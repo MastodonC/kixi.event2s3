@@ -33,7 +33,10 @@
   [data app-name]
   (let [opts (get-in data [:config :options])
         exp (some-> (force (:?err data)) exception->map)
-        msg (or (not-empty-str (force (:msg_ data))) (:message exp))
+        event? (get-in data [:config :event?])
+        msg (if event?
+              (first (:vargs data))
+              (or (not-empty-str (force (:msg_ data))) (:message exp)))
         out {:level (:level data)
              :namespace (:?ns-str data)
              :application app-name
@@ -43,7 +46,7 @@
              :hostname (force (:hostname_ data))
              :message msg
              "@timestamp" (force (:timestamp_ data))}]
-    (if (get-in data [:config :event?])
+    (if event?
       (assoc out :logtype :event)
       out)))
 

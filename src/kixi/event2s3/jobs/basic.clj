@@ -21,7 +21,9 @@
                            (try
                              (timbre/with-merged-config
                                {:event? true}
-                               (timbre/info (shared/deserialize-message message)))
+                               (-> message
+                                   (shared/deserialize-message)
+                                   (timbre/info)))
                              (catch Exception e
                                (timbre/error e "original:" (String. message "UTF-8"))))) batch))))
   {})
