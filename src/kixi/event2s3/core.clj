@@ -10,7 +10,7 @@
             [taoensso.timbre :as timbre]
             [com.stuartsierra.component :as component]
             [kixi.event2s3.heartbeat-server :as heartbeat]
-            [kixi.event2s3.logstash :as logstash]
+            [kixi.log :as kixi-log]
             ;; Load plugin classes on peer start
             [onyx.plugin [core-async]]
             ;; Load our jobs
@@ -101,15 +101,12 @@
           errors (exit 1 (error-msg errors)))
     (let [config (read-config (:config options) {:profile (:profile options)})
           log-config (assoc (:log-config config)
-                            :timestamp-opts logstash/logback-timestamp-opts)]
+                            :timestamp-opts kixi-log/default-timestamp-opts)]
       (timbre/set-config!
        (assoc log-config
               :appenders (if (= (:profile options)
                                 :production)
-                           {:direct-json {:enabled?   true
-                                          :async?     false
-                                          :output-fn identity
-                                          :fn (logstash/json->out "kixi.event2s3")}}
+                           {:direct-json (kixi-log/timbre-appender-logstash "kixi.event2s3")}
                            {:println (timbre/println-appender)})))
       (timbre/info "Arguments:" args)
       (timbre/info "Options:" pargs)

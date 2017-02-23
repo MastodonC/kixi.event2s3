@@ -7,7 +7,6 @@
             [onyx.tasks.kafka :as kafka-task]
             [onyx.tasks.s3 :as s3]
             [kixi.event2s3.shared :as shared]
-            [kixi.event2s3.logstash :as logstash]
             [taoensso.timbre :as timbre]
             [franzy.admin.zookeeper.client :as client]
             [franzy.admin.partitions :as fp]))
