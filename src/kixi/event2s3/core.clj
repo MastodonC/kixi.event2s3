@@ -104,13 +104,13 @@
                             :timestamp-opts logstash/logback-timestamp-opts)]
       (timbre/set-config!
        (assoc log-config
-              :appenders (if (= (:profile options)
-                                :production)
-                           {:direct-json {:enabled?   true
-                                          :async?     false
-                                          :output-fn identity
-                                          :fn (logstash/json->out "kixi.event2s3")}}
-                           {:println (timbre/println-appender)})))
+              :appenders (if true #_(= (:profile options)
+                                       :production)
+                             {:direct-json {:enabled?   true
+                                            :async?     false
+                                            :output-fn identity
+                                            :fn (logstash/json->out "kixi.event2s3")}}
+                             {:println (timbre/println-appender)})))
       (timbre/info "Arguments:" args)
       (timbre/info "Options:" pargs)
       (case action

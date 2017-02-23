@@ -24,7 +24,6 @@
                                {:event? true}
                                (-> message
                                    (shared/deserialize-message)
-                                   (generate-string)
                                    (timbre/info)))
                              (catch Exception e
                                (timbre/error e "original:" (String. message "UTF-8"))))) batch))))
