@@ -41,7 +41,7 @@
              :line (:?line data)
              :exception exp
              :hostname (force (:hostname_ data))
-             :message (if-not (string? msg) (json/generate-string msg) msg)
+             :message msg
              "@timestamp" (force (:timestamp_ data))}]
     (if (get-in data [:config :event?])
       (assoc out :logtype :event)

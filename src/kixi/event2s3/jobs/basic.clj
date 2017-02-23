@@ -10,7 +10,8 @@
             [kixi.event2s3.logstash :as logstash]
             [taoensso.timbre :as timbre]
             [franzy.admin.zookeeper.client :as client]
-            [franzy.admin.partitions :as fp]))
+            [franzy.admin.partitions :as fp]
+            [cheshire.core :refer [generate-string]]))
 
 (def logger (agent nil))
 
@@ -21,7 +22,10 @@
                            (try
                              (timbre/with-merged-config
                                {:event? true}
-                               (timbre/info (shared/deserialize-message message)))
+                               (-> message
+                                   (shared/deserialize-message)
+                                   (generate-string)
+                                   (timbre/info)))
                              (catch Exception e
                                (timbre/error e "original:" (String. message "UTF-8"))))) batch))))
   {})
