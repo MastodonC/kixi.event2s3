@@ -61,7 +61,7 @@
 (defmethod register-job "event-s3-job"
   [job-name config]
   (let [topic (get-in config [:job-config :kafka-topic])
-        zk-addr (get-in config [:env-config :zookeeper/address])
+        zk-addr (get-in config [:job-config :zk-kafka-address])
         kafka-topic-partitions (get-partition-count-for-topic zk-addr topic)
         _ (timbre/info "Detected" kafka-topic-partitions "Kafka partitions for topic" topic)
         kafka-opts     {:onyx/batch-size (get-in config [:job-config :kafka-task :onyx-batch-size])

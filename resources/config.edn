@@ -49,6 +49,9 @@
                                     :request-logging? true}}
  :job-config {:kafka-task {:onyx-batch-size #long #or [#env ONYX_BATCH_SIZE 10]
                            :onyx-batch-timeout #long #or [#env ONYX_BATCH_TIMEOUT 1000]}
+              :zk-kafka-address #profile {:default "127.0.0.1:2181"
+                                          :docker "zookeeper:2181"
+                                          :production "master.mesos:2181/dcos-service-kafka"}
               :s3-task {:onyx-batch-size #long #or [#env ONYX_BATCH_SIZE 50]
                         :onyx-batch-timeout #long #or [#env ONYX_BATCH_TIMEOUT 60000]}
               :kafka-topic #or [#env KAFKA_TOPIC "event"]
