@@ -26,7 +26,8 @@
                  [aleph "0.4.1"]
                  [org.slf4j/log4j-over-slf4j ~slf4j-version]
                  [org.slf4j/jul-to-slf4j ~slf4j-version]
-                 [org.slf4j/jcl-over-slf4j ~slf4j-version]]
+                 [org.slf4j/jcl-over-slf4j ~slf4j-version]
+                 [kixi/kixi.log "0.1.1"]]
   :source-paths ["src"]
 
   :profiles {:dev {:jvm-opts ["-XX:-OmitStackTraceInFastThrow"]
