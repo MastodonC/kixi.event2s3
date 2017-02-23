@@ -18,11 +18,9 @@
                  (when-let [batch (:onyx.core/batch event)]
                    (run! (fn [{:keys [message]}]
                            (try
-                             (timbre/with-merged-config
-                               {:event? true}
-                               (-> message
-                                   (shared/deserialize-message)
-                                   (timbre/info)))
+                             (-> message
+                                 (shared/deserialize-message)
+                                 (timbre/info))
                              (catch Exception e
                                (timbre/error e "original:" (String. message "UTF-8"))))) batch))))
   {})
